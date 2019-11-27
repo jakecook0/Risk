@@ -17,7 +17,6 @@ public class Risk extends Application {
         //load an array into the gridpane
         //builds each region w/associated color
 
-        //logic to make border around each region
         bp.getChildren().addAll(board);
         Scene scene = new Scene(bp, 750, 750);
         stage.setTitle("Risk demo");
