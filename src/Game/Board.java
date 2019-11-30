@@ -2,16 +2,13 @@ package Game;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
-import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
-import javafx.scene.text.Text;
 
 public class Board extends BorderPane {
     GridPane gpColors = new GridPane();
@@ -20,7 +17,7 @@ public class Board extends BorderPane {
     Rectangle[][] boardColors;
     Integer[][] integerTroops = initTroops();
     Label[][] boardTroops;
-    Rectangle[][] playerSelection = initSelection();
+    Rectangle[][] boardSelections = initSelection();
     StackPane sp = new StackPane();
 
     Color[][] colors = new Color[][]{   //10x10 color grid BLACK SPACES ARE EMPTY-REGIONS
@@ -66,13 +63,15 @@ public class Board extends BorderPane {
     }
 
     public void drawBoard() {
-        boardColors = getBoard();
+        boardColors = getColors();
         boardTroops = getTroops();
+        boardSelections = getSelections();
 
         for (int i = 0; i < boardColors.length; i++) {
             for (int j = 0; j < boardColors[i].length; j++) {
                 gpColors.add(boardColors[i][j], j, i);
                 gpTroops.add(boardTroops[i][j], j, i);
+                gpSelection.add(boardSelections[i][j], j, i);
 
                 //TODO: align the gpTroops objs to center on the gpColor objs
 
@@ -80,34 +79,48 @@ public class Board extends BorderPane {
 
             }
         }
-        sp.getChildren().addAll(gpColors);
+        sp.getChildren().addAll(gpColors, gpTroops, gpSelection);
         setCenter(sp);
     }
 
-    private Rectangle[][] getBoard() {      //makes regions clickable
+    private Rectangle[][] getSelections() {
         EventHandler<MouseEvent> clickedBox = e -> {
             Rectangle r = (Rectangle)e.getSource();
-            int row = gpColors.getRowIndex(r);
-            int col = gpColors.getColumnIndex(r);
+            int row = gpSelection.getRowIndex(r);
+            int col = gpSelection.getColumnIndex(r);
             //give clicked result to something
             System.out.println("This box was clicked: " + row + ", " + col + "\nWith color Value: " + boardColors[row][col]);    //for testing purposes
             highlightSelection(row, col);
         };
 
-        Rectangle[][] clickColors = new Rectangle[10][10];
+        Rectangle[][] clickRect = new Rectangle[10][10];
+        for (int i=0; i < colors.length; i++) {
+            for (int j=0; j < colors[i].length; j++) {
+                Rectangle r = new Rectangle(50, 50);
+                r.setFill(Color.TRANSPARENT);
+                r.setStroke(Color.TRANSPARENT);
+                if (colors[i][j] != Color.BLACK) r.setOnMouseClicked(clickedBox);   //can't click black tiles
+                clickRect[i][j] = r;
+            }
+        }
+        return clickRect;
+    }
+
+    private Rectangle[][] getColors() {      //makes regions clickable
+
+        Rectangle[][] coloredRects = new Rectangle[10][10];
         for (int i=0; i < colors.length; i++) {
             for (int j=0; j < colors[i].length; j++) {
                 Rectangle r = new Rectangle(50, 50);
                 r.setFill(colors[i][j]);
                 if (colors[i][j] != Color.BLACK) {
-                    r.setOnMouseClicked(clickedBox);
                     r.setStroke(Color.ORANGE);
                 }
                 else r.setStroke(Color.BLACK);
-                clickColors[i][j] = r;
+                coloredRects[i][j] = r;
             }
         }
-        return clickColors;
+        return coloredRects;
 
     }
 
