@@ -72,12 +72,12 @@ public class Board extends BorderPane {
 
         for (int i = 0; i < boardColors.length; i++) {
             for (int j = 0; j < boardColors[i].length; j++) {
-                StackPane tmpStack = new StackPane();
-                tmpStack.getChildren().addAll(boardColors[i][j], boardTroops[i][j], boardSelections[i][j]);
-                gpColors.add(tmpStack, j, i);
-//                gpColors.add(boardColors[i][j], j, i);
-//                gpTroops.add(boardTroops[i][j], j, i);
-//                gpSelection.add(boardSelections[i][j], j, i);
+//                StackPane tmpStack = new StackPane();
+//                tmpStack.getChildren().addAll(boardColors[i][j], boardTroops[i][j], boardSelections[i][j]);
+//                gpColors.add(tmpStack, j, i);
+                gpColors.add(boardColors[i][j], j, i);
+                gpTroops.add(boardTroops[i][j], j, i);
+                gpSelection.add(boardSelections[i][j], j, i);
 
 
                 //TODO: align the gpTroops objs to center on the gpColor objs
@@ -85,8 +85,12 @@ public class Board extends BorderPane {
 
             }
         }
-//        sp.getChildren().addAll(gpColors, gpTroops, gpSelection);
-        setCenter(gpColors);
+
+        gpTroops.setAlignment(Pos.CENTER);
+        gpTroops.setVgap(36);
+        gpTroops.setHgap(41);
+        sp.getChildren().addAll(gpColors, gpTroops, gpSelection);
+        setCenter(sp);
     }
 
     private Rectangle[][] getSelections() {
