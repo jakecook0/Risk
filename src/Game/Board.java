@@ -1,5 +1,6 @@
 package Game;
 
+import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -9,6 +10,8 @@ import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+
+import java.lang.reflect.Array;
 
 public class Board extends BorderPane {
     GridPane gpColors = new GridPane();
@@ -69,25 +72,28 @@ public class Board extends BorderPane {
 
         for (int i = 0; i < boardColors.length; i++) {
             for (int j = 0; j < boardColors[i].length; j++) {
-                gpColors.add(boardColors[i][j], j, i);
-                gpTroops.add(boardTroops[i][j], j, i);
-                gpSelection.add(boardSelections[i][j], j, i);
+                StackPane tmpStack = new StackPane();
+                tmpStack.getChildren().addAll(boardColors[i][j], boardTroops[i][j], boardSelections[i][j]);
+                gpColors.add(tmpStack, j, i);
+//                gpColors.add(boardColors[i][j], j, i);
+//                gpTroops.add(boardTroops[i][j], j, i);
+//                gpSelection.add(boardSelections[i][j], j, i);
+
 
                 //TODO: align the gpTroops objs to center on the gpColor objs
 
-//                boardTroops[i][j].setAlignment(Pos.CENTER);   //this doesn't work 'yet'
 
             }
         }
-        sp.getChildren().addAll(gpColors, gpTroops, gpSelection);
-        setCenter(sp);
+//        sp.getChildren().addAll(gpColors, gpTroops, gpSelection);
+        setCenter(gpColors);
     }
 
     private Rectangle[][] getSelections() {
         EventHandler<MouseEvent> clickedBox = e -> {
             Rectangle r = (Rectangle)e.getSource();
-            int row = gpSelection.getRowIndex(r);
-            int col = gpSelection.getColumnIndex(r);
+            int row = gpColors.getRowIndex(r);
+            int col = gpColors.getColumnIndex(r);
             //give clicked result to something
             System.out.println("This box was clicked: " + row + ", " + col + "\nWith color Value: " + boardColors[row][col]);    //for testing purposes
             highlightSelection(row, col);
@@ -107,21 +113,17 @@ public class Board extends BorderPane {
     }
 
     private Rectangle[][] getColors() {      //makes regions clickable
-
         Rectangle[][] coloredRects = new Rectangle[10][10];
         for (int i=0; i < colors.length; i++) {
             for (int j=0; j < colors[i].length; j++) {
                 Rectangle r = new Rectangle(50, 50);
                 r.setFill(colors[i][j]);
-                if (colors[i][j] != Color.BLACK) {
-                    r.setStroke(Color.ORANGE);
-                }
+                if (colors[i][j] != Color.BLACK) r.setStroke(Color.ORANGE);
                 else r.setStroke(Color.BLACK);
                 coloredRects[i][j] = r;
             }
         }
         return coloredRects;
-
     }
 
     private Label[][] getTroops() {     //makes Integers Node objects to put in gpTroops to stack on gpColors
