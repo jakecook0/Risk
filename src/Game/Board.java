@@ -19,14 +19,19 @@ public class Board extends BorderPane {
     GridPane gpSelection = new GridPane();
     Rectangle[][] boardColors;
     Label[][] boardTroops;
-    Rectangle[][] boardSelections = initSelection();
+    Rectangle[][] boardSelections = new Rectangle[10][10];
     StackPane sp = new StackPane();
     Color[][] colors;
     Integer[][] integerTroops;
     ArrayList<Integer> selection = new ArrayList<>();
 
+    public Board(int turn, Color[][] color, Integer[][] troops){
+        this.colors = color;
+        this.integerTroops = troops;
+        refresh(turn, colors);
+    }
 
-    public Board(int turn, Color[][] colors){
+    public void refresh(int turn, Color[][] colors) {
         drawTitle(turn);
         drawBoard(colors);
         drawButtons();
@@ -46,8 +51,10 @@ public class Board extends BorderPane {
         Button attack = new Button("Attack");
         Button move = new Button("Move");
         Button endTurn = new Button("End Turn");
+        Button clearSelections = new Button("Clear Selections");
+        clearSelections.setOnAction(e -> clearSelection());
         TextField("Troop #");
-        pn.getChildren().addAll(place, attack, endTurn, move);
+        pn.getChildren().addAll(place, attack, move, endTurn, clearSelections);
         setBottom(pn);
     }
 
@@ -144,19 +151,22 @@ public class Board extends BorderPane {
         boardColors[i][j].setStroke(Color.DARKBLUE);
     }
 
-    public Rectangle[][] initSelection() {
+    public void clearSelection() {
         Rectangle[][] r = new Rectangle[10][10];
         //i>r.length?
-        for (Rectangle[] rectangles : r) {
-            for (Rectangle rectangle : rectangles) {
-                //rectangle.setStroke(Color.TRANSPARENT);
-                //rectangle.setFill(Color.TRANSPARENT);
-            }
-        }
-        return r;
+//        for (Rectangle[] rectangles : r) {
+//            for (Rectangle rectangle : rectangles) {
+//                //rectangle.setStroke(Color.TRANSPARENT);
+//                //rectangle.setFill(Color.TRANSPARENT);
+//            }
+//        }
+        selection = new ArrayList<>();
+        boardSelections = r;
+        drawBoard(colors);
     }
 
+    //getter and setters
     public ArrayList<Integer> getSelection() {
-        return selection;
+        return this.selection;
     }
 }
