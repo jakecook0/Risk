@@ -10,6 +10,9 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+
 public class Board extends BorderPane {
     GridPane gpColors = new GridPane();
     GridPane gpTroops = new GridPane();
@@ -20,6 +23,7 @@ public class Board extends BorderPane {
     StackPane sp = new StackPane();
     Color[][] colors;
     Integer[][] integerTroops;
+    ArrayList<Integer> selection = new ArrayList<>();
 
 
     public Board(int turn, Color[][] colors){
@@ -51,9 +55,9 @@ public class Board extends BorderPane {
     }
 
     public void drawBoard(Color[][] colors) {
-        boardColors = getColors(colors);
-        boardTroops = getTroops();
-        boardSelections = getSelections();
+        boardColors = convertColors(colors);
+        boardTroops = convertTroops();
+        boardSelections = convertSelections();
 
         for (int i = 0; i < boardColors.length; i++) {
             for (int j = 0; j < boardColors[i].length; j++) {
@@ -78,16 +82,7 @@ public class Board extends BorderPane {
         setCenter(sp);
     }
 
-    private Rectangle[][] getSelections() {
-        EventHandler<MouseEvent> clickedBox = e -> {
-            Rectangle r = (Rectangle)e.getSource();
-            int row = gpColors.getRowIndex(r);
-            int col = gpColors.getColumnIndex(r);
-            //give clicked result to something
-            System.out.println("This box was clicked: " + row + ", " + col + "\nWith color Value: " + boardColors[row][col]);    //for testing purposes
-            highlightSelection(row, col);
-        };
-
+    private Rectangle[][] convertSelections() {
         Rectangle[][] clickRect = new Rectangle[10][10];
         for (int i=0; i < colors.length; i++) {
             for (int j=0; j < colors[i].length; j++) {
@@ -101,7 +96,17 @@ public class Board extends BorderPane {
         return clickRect;
     }
 
-    private Rectangle[][] getColors(Color[][] colors) {      //makes regions clickable
+    EventHandler<MouseEvent> clickedBox = e -> {
+        Rectangle r = (Rectangle)e.getSource();
+        int row = gpColors.getRowIndex(r);
+        int col = gpColors.getColumnIndex(r);
+        //give clicked result to something
+        System.out.println("This box was clicked: " + row + ", " + col + "\nWith color Value: " + boardColors[row][col]);    //for testing purposes
+        highlightSelection(row, col);
+        selection.add(row, col);
+    };
+
+    private Rectangle[][] convertColors(Color[][] colors) {      //makes regions clickable
         Rectangle[][] coloredRects = new Rectangle[10][10];
         for (int i=0; i < colors.length; i++) {
             for (int j=0; j < colors[i].length; j++) {
@@ -115,7 +120,7 @@ public class Board extends BorderPane {
         return coloredRects;
     }
 
-    public Label[][] getTroops() {     //makes Integers Node objects to put in gpTroops to stack on gpColors
+    private Label[][] convertTroops() {     //makes Integers Node objects to put in gpTroops to stack on gpColors
         Label[][] t = new Label[10][10];
         for (int i=0; i<integerTroops.length; i++) {
             for (int j=0; j<integerTroops[i].length; j++) {
@@ -128,10 +133,8 @@ public class Board extends BorderPane {
 
     public static Integer[][] initTroops() {
         Integer[][] troops = new Integer[10][10];
-        for (int i=0; i<troops.length; i++) {
-            for (int j=0; j<troops[i].length; j++) {
-                troops[i][j] = 0;
-            }
+        for (Integer[] troop : troops) {
+            Arrays.fill(troop, 0);
         }
         return troops;
     }   //integer troops initializer to 0;
@@ -141,7 +144,7 @@ public class Board extends BorderPane {
         boardColors[i][j].setStroke(Color.DARKBLUE);
     }
 
-    private Rectangle[][] initSelection() {
+    public Rectangle[][] initSelection() {
         Rectangle[][] r = new Rectangle[10][10];
         //i>r.length?
         for (Rectangle[] rectangles : r) {
@@ -151,5 +154,9 @@ public class Board extends BorderPane {
             }
         }
         return r;
+    }
+
+    public ArrayList<Integer> getSelection() {
+        return selection;
     }
 }
