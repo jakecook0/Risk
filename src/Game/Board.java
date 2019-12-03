@@ -1,6 +1,5 @@
 package Game;
 
-import javafx.collections.ObservableList;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -11,35 +10,21 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 
-import java.lang.reflect.Array;
-
 public class Board extends BorderPane {
     GridPane gpColors = new GridPane();
     GridPane gpTroops = new GridPane();
     GridPane gpSelection = new GridPane();
     Rectangle[][] boardColors;
-    Integer[][] integerTroops = initTroops();
     Label[][] boardTroops;
     Rectangle[][] boardSelections = initSelection();
     StackPane sp = new StackPane();
-
-    Color[][] colors = new Color[][]{   //10x10 color grid BLACK SPACES ARE EMPTY-REGIONS
-            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
-            {Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
-            {Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
-            {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
-            {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
-            {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, Color.BLACK, Color.WHITE},
-            {Color.BLACK, Color.WHITE, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE,},
-            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE,},
-            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
-            {Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
-    };
+    Color[][] colors;
+    Integer[][] integerTroops;
 
 
-    public Board(int turn){
+    public Board(int turn, Color[][] colors){
         drawTitle(turn);
-        drawBoard();
+        drawBoard(colors);
         drawButtons();
     }
 
@@ -65,8 +50,8 @@ public class Board extends BorderPane {
     private void TextField(String s) {
     }
 
-    public void drawBoard() {
-        boardColors = getColors();
+    public void drawBoard(Color[][] colors) {
+        boardColors = getColors(colors);
         boardTroops = getTroops();
         boardSelections = getSelections();
 
@@ -116,7 +101,7 @@ public class Board extends BorderPane {
         return clickRect;
     }
 
-    private Rectangle[][] getColors() {      //makes regions clickable
+    private Rectangle[][] getColors(Color[][] colors) {      //makes regions clickable
         Rectangle[][] coloredRects = new Rectangle[10][10];
         for (int i=0; i < colors.length; i++) {
             for (int j=0; j < colors[i].length; j++) {
@@ -130,7 +115,7 @@ public class Board extends BorderPane {
         return coloredRects;
     }
 
-    private Label[][] getTroops() {     //makes Integers Node objects to put in gpTroops to stack on gpColors
+    public Label[][] getTroops() {     //makes Integers Node objects to put in gpTroops to stack on gpColors
         Label[][] t = new Label[10][10];
         for (int i=0; i<integerTroops.length; i++) {
             for (int j=0; j<integerTroops[i].length; j++) {
@@ -141,7 +126,7 @@ public class Board extends BorderPane {
     }
 
 
-    private Integer[][] initTroops() {
+    public static Integer[][] initTroops() {
         Integer[][] troops = new Integer[10][10];
         for (int i=0; i<troops.length; i++) {
             for (int j=0; j<troops[i].length; j++) {
@@ -158,10 +143,11 @@ public class Board extends BorderPane {
 
     private Rectangle[][] initSelection() {
         Rectangle[][] r = new Rectangle[10][10];
-        for (int i=0; i>r.length; i++) {
-            for (int j=0; j<r[i].length; j++) {
-                r[i][j].setStroke(Color.TRANSPARENT);
-                r[i][j].setFill(Color.TRANSPARENT);
+        //i>r.length?
+        for (Rectangle[] rectangles : r) {
+            for (Rectangle rectangle : rectangles) {
+                //rectangle.setStroke(Color.TRANSPARENT);
+                //rectangle.setFill(Color.TRANSPARENT);
             }
         }
         return r;

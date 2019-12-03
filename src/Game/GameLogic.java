@@ -1,10 +1,13 @@
 package Game;
 
 public class GameLogic {
+    int turn = 0;
+    private Object Board;
+
     public void gameInit() {    //get one array position
         //alternates between players to place troops in territories (gives each territory 2? troops)
         //needs to modify the <colors> and <troops> arrays
-
+        while()
     }
 
 
