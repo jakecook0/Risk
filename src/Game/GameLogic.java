@@ -7,7 +7,7 @@ public class GameLogic {
     public void gameInit() {    //get one array position
         //alternates between players to place troops in territories (gives each territory 2? troops)
         //needs to modify the <colors> and <troops> arrays
-        while()
+//        while ()
     }
 
 
@@ -31,7 +31,7 @@ public class GameLogic {
     }
 
 
-    private boolean roll() {
+    public boolean roll() {
         //one is attacker, two  is defender
         double one = Math.random()*10%6;
         double two = Math.random()*10%6;
