@@ -25,12 +25,9 @@ public class Risk extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         BorderPane bp = new BorderPane();
-//        Controller control = new Controller(turn, colors);
-        Board board = new Board(turn, colors, Board.initTroops());
-//        Controller control = new Controller(turn, colors, Board.initTroops());
+//        Board board = new Board(turn, colors, Board.initTroops());
+        Board board = new Board();
 
-
-//        bp.getChildren().addAll(board.bp);
         Scene scene = new Scene(board.bp, 750, 750);
         stage.setTitle("Risk demo");
         stage.setScene(scene);

@@ -22,15 +22,27 @@ public class Board extends GameLogic {
     Label[][] boardTroops;
     Rectangle[][] boardSelections = new Rectangle[10][10];
     StackPane sp = new StackPane();
-    Color[][] colors;
-    Integer[][] integerTroops;
-    ArrayList<Integer> selection = new ArrayList<>();
-    int turn;
+//    static Color[][] colors;
+    Integer[][] integerTroops = initTroops();
+    static ArrayList<Integer> selection = new ArrayList<>();
+    int turn = 0;
+    static Color[][] colors = new Color[][]{   //10x10 color grid BLACK SPACES ARE EMPTY-REGIONS
+            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
+            {Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
+            {Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
+            {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
+            {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
+            {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, Color.BLACK, Color.WHITE},
+            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE,},
+            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE,},
+            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
+            {Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
+    };
 
-    public Board(int turn, Color[][] color, Integer[][] troops){
-        this.colors = color;
-        this.integerTroops = troops;
-        this.turn = turn;
+    public Board(){
+//        colors = color;
+//        this.integerTroops = troops;
+//        this.turn = turn;
         refresh(turn, colors);
     }
 
@@ -60,8 +72,10 @@ public class Board extends GameLogic {
         endTurn.setOnAction(e -> endTurn(turn));
         Button clearSelections = new Button("Clear Selections");
         clearSelections.setOnAction(e -> clearSelection());
+        Button newGame = new Button("New Game");
+        newGame.setOnAction(e -> gameInit(turn));
         TextField("Troop #");
-        pn.getChildren().addAll(place, attack, move, endTurn, clearSelections);
+        pn.getChildren().addAll(place, attack, move, endTurn, clearSelections, newGame);
         pn.setAlignment(Pos.CENTER);
         bp.setBottom(pn);
     }
@@ -70,7 +84,7 @@ public class Board extends GameLogic {
     }
 
     public void drawBoard(Color[][] colors) {
-        clearPanes();
+//        clearPanes();
         boardColors = convertColors(colors);
         boardTroops = convertTroops();
         boardSelections = convertSelections();
@@ -173,19 +187,19 @@ public class Board extends GameLogic {
         drawBoard(colors);
     }
 
+    private void clearPanes() {
+        bp = new BorderPane();
+        gpColors = new GridPane();
+        gpTroops = new GridPane();
+        gpSelection = new GridPane();
+    }
+
     //getter and setters
-    public ArrayList<Integer> getSelect() {
+    public static ArrayList<Integer> getSelection() {
         return selection;
     }
 
-    public static ArrayList<Integer> getSelection() {
-        return getSelection();
-    }
-
-    private void clearPanes() {
-        BorderPane bp = new BorderPane();
-        GridPane gpColors = new GridPane();
-        GridPane gpTroops = new GridPane();
-        GridPane gpSelection = new GridPane();
+    public static Color[][] getColors() {
+        return colors;
     }
 }

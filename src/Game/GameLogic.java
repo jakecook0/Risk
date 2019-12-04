@@ -8,15 +8,16 @@ public class GameLogic {
     Integer[][] integerTroops = Board.initTroops();
     Color[][] colors;
 
-    public void gameInit(int turn, Color[][] colors) {    //get one array position
+    public void gameInit(int turn) {    //get one array position
         //alternates between players to place troops in territories (gives each territory 2? troops)
         //needs to modify the <colors> and <troops> arrays
+        Color[][] colors = Board.getColors();
         boolean delimiter = true;
 
         while(delimiter){
             for(Color[] c: colors){
                 for(Color c1: c){
-                    if (c.equals(Color.WHITE)) {
+                    if (c1.equals(Color.WHITE)) {
                         delimiter = false;
                         break;
                     }
@@ -26,7 +27,8 @@ public class GameLogic {
             if(turn == 0){
                 colors[click.get(0)][click.get(1)] = (Color.BLUE);
                 integerTroops[click.get(0)][click.get(1)] = 2;
-            }else{
+            }
+            else{
                 colors[click.get(0)][click.get(1)] = (Color.RED);
                 integerTroops[click.get(0)][click.get(1)] = 2;
             }
@@ -42,10 +44,10 @@ public class GameLogic {
         int countBlue = 0;
         for (Color[] c: colors) {
             for (Color c1 : c) {
-                if(colors.equals(Color.RED)){
+                if(c1.equals(Color.RED)){
                     countRed++;
                 }
-                else if(colors.equals(Color.BLUE)){
+                else if(c1.equals(Color.BLUE)){
                     countBlue++;
                 }
             }
@@ -54,7 +56,8 @@ public class GameLogic {
         int troops = 0;
         if(turn == 0){
             troops = countBlue/68; //68 because that is how many possible squares there are.
-        }else{
+        }
+        else{
             troops = countRed/68;
         }
         troops *= Math.random()%6*10;
@@ -105,7 +108,8 @@ public class GameLogic {
                 }else{
                     colors[row2][col2] = Color.valueOf(String.valueOf(Color.RED));
                 }
-            }else{
+            }
+            else{
                 return;
             }
         }
