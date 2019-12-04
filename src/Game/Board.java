@@ -13,7 +13,8 @@ import javafx.scene.text.Font;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-public class Board extends BorderPane {
+public class Board extends GameLogic {
+    BorderPane bp = new BorderPane();
     GridPane gpColors = new GridPane();
     GridPane gpTroops = new GridPane();
     GridPane gpSelection = new GridPane();
@@ -24,10 +25,12 @@ public class Board extends BorderPane {
     Color[][] colors;
     Integer[][] integerTroops;
     ArrayList<Integer> selection = new ArrayList<>();
+    int turn;
 
     public Board(int turn, Color[][] color, Integer[][] troops){
         this.colors = color;
         this.integerTroops = troops;
+        this.turn = turn;
         refresh(turn, colors);
     }
 
@@ -40,28 +43,34 @@ public class Board extends BorderPane {
     public void drawTitle(int turn){
         String who = turn == 0 ? "Blue" : "Red";
         Label lb = new Label(who + " player's turn");
-        setTop(lb);
         lb.setFont(Font.font("SansSerif", 30));
-        setAlignment(lb, Pos.CENTER);
+        bp.setTop(lb);
+        bp.setAlignment(lb, Pos.CENTER);
     }
 
     public void drawButtons(){
         HBox pn = new HBox();
         Button place = new Button("Place");
+        place.setOnAction(e -> place(turn));
         Button attack = new Button("Attack");
+        attack.setOnAction(e -> attack(turn));
         Button move = new Button("Move");
+        move.setOnAction(e -> move());
         Button endTurn = new Button("End Turn");
+        endTurn.setOnAction(e -> endTurn(turn));
         Button clearSelections = new Button("Clear Selections");
         clearSelections.setOnAction(e -> clearSelection());
         TextField("Troop #");
         pn.getChildren().addAll(place, attack, move, endTurn, clearSelections);
-        setBottom(pn);
+        pn.setAlignment(Pos.CENTER);
+        bp.setBottom(pn);
     }
 
     private void TextField(String s) {
     }
 
     public void drawBoard(Color[][] colors) {
+        clearPanes();
         boardColors = convertColors(colors);
         boardTroops = convertTroops();
         boardSelections = convertSelections();
@@ -74,19 +83,17 @@ public class Board extends BorderPane {
                 gpColors.add(boardColors[i][j], j, i);
                 gpTroops.add(boardTroops[i][j], j, i);
                 gpSelection.add(boardSelections[i][j], j, i);
-
-
-                //TODO: align the gpTroops objs to center on the gpColor objs
-
-
             }
         }
 
         gpTroops.setAlignment(Pos.CENTER);
+        gpColors.setAlignment(Pos.CENTER);
+        gpSelection.setAlignment(Pos.CENTER);
         gpTroops.setVgap(36);
         gpTroops.setHgap(41);
+        sp.setAlignment(Pos.CENTER);
         sp.getChildren().addAll(gpColors, gpTroops, gpSelection);
-        setCenter(sp);
+        bp.setCenter(sp);
     }
 
     private Rectangle[][] convertSelections() {
@@ -110,7 +117,8 @@ public class Board extends BorderPane {
         //give clicked result to something
         System.out.println("This box was clicked: " + row + ", " + col + "\nWith color Value: " + boardColors[row][col]);    //for testing purposes
         highlightSelection(row, col);
-        selection.add(row, col);
+        selection.add(row);
+        selection.add(col);
     };
 
     private Rectangle[][] convertColors(Color[][] colors) {      //makes regions clickable
@@ -166,7 +174,18 @@ public class Board extends BorderPane {
     }
 
     //getter and setters
-    public ArrayList<Integer> getSelection() {
-        return this.selection;
+    public ArrayList<Integer> getSelect() {
+        return selection;
+    }
+
+    public static ArrayList<Integer> getSelection() {
+        return getSelection();
+    }
+
+    private void clearPanes() {
+        BorderPane bp = new BorderPane();
+        GridPane gpColors = new GridPane();
+        GridPane gpTroops = new GridPane();
+        GridPane gpSelection = new GridPane();
     }
 }

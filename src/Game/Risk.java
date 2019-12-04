@@ -1,6 +1,7 @@
 package Game;
 
 import javafx.application.Application;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
@@ -24,10 +25,13 @@ public class Risk extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         BorderPane bp = new BorderPane();
-        Controller control = new Controller(turn, colors);
+//        Controller control = new Controller(turn, colors);
+        Board board = new Board(turn, colors, Board.initTroops());
+//        Controller control = new Controller(turn, colors, Board.initTroops());
 
-        bp.getChildren().addAll(control.board);
-        Scene scene = new Scene(bp, 750, 750);
+
+//        bp.getChildren().addAll(board.bp);
+        Scene scene = new Scene(board.bp, 750, 750);
         stage.setTitle("Risk demo");
         stage.setScene(scene);
         stage.show();

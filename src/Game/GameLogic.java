@@ -116,7 +116,7 @@ public class GameLogic {
         return turn;
     }
 
-    private boolean roll() {
+    public boolean roll() {
         //one is attacker, two  is defender
         double one = Math.random()*10%6;
         double two = Math.random()*10%6;
