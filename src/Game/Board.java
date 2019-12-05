@@ -24,9 +24,9 @@ public class Board extends GameLogic {
     Label[][] boardTroops = new Label[10][10];
     StackPane sp = new StackPane();
     Integer[][] integerTroops = new Integer[10][10];
-    static ArrayList<Integer> selection = new ArrayList<>();
+    ArrayList<Integer> selection;
     int turn = 0;
-    static Color[][] colors = new Color[][]{   //10x10 color grid BLACK SPACES ARE EMPTY-REGIONS
+    Color[][] colors = new Color[][]{   //10x10 color grid BLACK SPACES ARE EMPTY-REGIONS
             {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
             {Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
             {Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
@@ -47,39 +47,39 @@ public class Board extends GameLogic {
     TextField input = new TextField("Troop #");
 
     public Board(){
+        selection = new ArrayList<>();
         initTroops();   //initializes the board troops to '0'
         initSelections();
         setActions();   //sets the actions of the buttons (from the GameLogic)
-        refresh();  //draws the GUI
+//        refresh(Board.this);  //draws the GUI
+        refresh(Board.this);
     }
 
-    public void refresh() {
+    public void refresh(Board board) {
+        this.turn = board.turn;
+//        this.selection = board.selection;
+        this.colors = board.colors;
+        this.integerTroops = board.integerTroops;
+        clearPanes();
+        clearSelection();
         drawTitle();
         drawBoard();
         drawButtons();
     }
 
+
     public void drawTitle(){
+        System.out.println("drawTitle");
         String who = turn == 0 ? "Blue" : "Red";
         Label lb = new Label(who + " player's turn");
         lb.setFont(Font.font("SansSerif", 30));
         bp.setTop(lb);
         bp.setAlignment(lb, Pos.CENTER);
-    }
-
-    public void drawButtons(){
-        System.out.println("I reached this");
-        HBox pn = new HBox();
-        pn.getChildren().addAll(place, attack, move, endTurn, clearSelections, newGame);
-        pn.setAlignment(Pos.CENTER);
-        bp.setBottom(pn);
-    }
-
-    private void TextField(String s) {
+//        System.out.println("Got here1");
     }
 
     public void drawBoard() {
-        clearPanes();
+        System.out.println("drawBoard");
         convertColors(colors);
         convertTroops();
 //        convertSelections();
@@ -105,6 +105,17 @@ public class Board extends GameLogic {
         bp.setCenter(sp);
     }
 
+    public void drawButtons(){
+        System.out.println("drawButtons\n");
+        HBox pn = new HBox();
+        pn.getChildren().addAll(place, attack, move, endTurn, clearSelections, newGame);
+        pn.setAlignment(Pos.CENTER);
+        bp.setBottom(pn);
+    }
+
+    private void TextField(String s) {
+    }
+
     private EventHandler<MouseEvent> clickedBox = e -> {
         Rectangle r = (Rectangle)e.getSource();
         int row = gpColors.getRowIndex(r);
@@ -112,8 +123,8 @@ public class Board extends GameLogic {
         //give clicked result to something
         System.out.println("This box was clicked: " + row + ", " + col + "\nWith color Value: " + boardColors[row][col]);    //for testing purposes
         highlightSelection(row, col);
-        selection.add(row);
-        selection.add(col);
+        this.selection.add(row);
+        this.selection.add(col);
     };
 
     private void convertColors(Color[][] colors) {      //makes regions clickable
@@ -154,19 +165,9 @@ public class Board extends GameLogic {
     }
 
     private void clearPanes() {
-        bp = new BorderPane();
         gpColors = new GridPane();
         gpTroops = new GridPane();
         gpSelection = new GridPane();
-    }
-
-    //getter and setters
-
-    public static ArrayList<Integer> getSelection() {
-        return selection;
-    }
-    public static Color[][] getColors() {
-        return colors;
     }
 
     public void initTroops() {
@@ -176,12 +177,12 @@ public class Board extends GameLogic {
     }   //integer troops initializer to 0;
 
     public void setActions() {
-        place.setOnAction(e -> place(turn));
-        attack.setOnAction(e -> attack(turn));
-        move.setOnAction(e -> move());
-        endTurn.setOnAction(e -> endTurn(turn));
-        clearSelections.setOnAction(e -> clearSelection());
-        newGame.setOnAction(e -> gameInit(turn));
+//        place.setOnAction(e -> GameLogic.place(turn));
+//        attack.setOnAction(e -> GameLogic.attack(turn));
+//        move.setOnAction(e -> GameLogic.move());
+//        endTurn.setOnAction(e -> GameLogic.gameendTurn(turn));
+        clearSelections.setOnAction(e -> clearSelection()); //How to
+        newGame.setOnAction(e -> gameInit(Board.this));
     }
 
     public void initSelections() {
@@ -193,5 +194,22 @@ public class Board extends GameLogic {
                 if (colors[i][j] != Color.BLACK) boardSelections[i][j].setOnMouseClicked(clickedBox);
             }
         }
+    }
+
+//    public static void gameInit() { //this is my problem
+//        GameLogic game = new GameLogic();
+//        game.gameInit();
+//    }
+
+    public ArrayList<Integer> getSelection() {
+        return this.selection;
+    }
+
+    public int getTurn() {
+        return this.turn;
+    }
+
+    public void setTurn(int who) {
+        this.turn = who;
     }
 }
