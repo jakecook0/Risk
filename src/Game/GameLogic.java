@@ -37,16 +37,20 @@ public class GameLogic {
                 }
             }
         }
+        System.out.println("Red: " + countRed);
+        System.out.println("Blue: " + countBlue);
 
-        int troops = 0;
+        double troops = 0;
         if(board.turn == 0){
-            troops = countBlue/68; //68 because that is how many possible squares there are.
+            troops = countBlue/3; //68 because that is how many possible squares there are.
         }
         else{
-            troops = countRed/68;
+            troops = countRed/3;
         }
-        troops *= Math.random()%6*10;
-        board.integerTroops[board.selection.get(0)][board.selection.get(1)] += troops;
+        if(troops<=2) troops = 2;
+//        troops *= Math.random()%6*10;
+        System.out.println("Troops: " + troops);
+        board.integerTroops[board.selection.get(0)][board.selection.get(1)] += (int)troops;
         board.refresh(board);
     }
 
