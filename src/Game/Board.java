@@ -150,7 +150,7 @@ public class Board extends GameLogic {
     private void highlightSelection(int i, int j) {
         boardSelections[i][j].setStroke(Color.GREEN);
         boardSelections[i][j].setFill(Color.GREY);
-        boardSelections[i][j].setOpacity(0.2);
+        boardSelections[i][j].setOpacity(0.4);
     }
 
     public void clearSelection() {
@@ -177,10 +177,10 @@ public class Board extends GameLogic {
     }   //integer troops initializer to 0;
 
     public void setActions() {
-//        place.setOnAction(e -> GameLogic.place(turn));
-//        attack.setOnAction(e -> GameLogic.attack(turn));
-//        move.setOnAction(e -> GameLogic.move());
-//        endTurn.setOnAction(e -> GameLogic.gameendTurn(turn));
+        place.setOnAction(e -> place(Board.this));
+        attack.setOnAction(e -> attack(Board.this));
+        move.setOnAction(e -> move(Board.this));
+        endTurn.setOnAction(e -> endTurn(Board.this));
         clearSelections.setOnAction(e -> clearSelection()); //How to
         newGame.setOnAction(e -> gameInit(Board.this));
     }
