@@ -1,5 +1,6 @@
 package Game;
 
+import javafx.animation.PathTransition;
 import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
@@ -8,8 +9,12 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.Paint;
+import javafx.scene.shape.Circle;
+import javafx.scene.shape.Line;
 import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
+import javafx.util.Duration;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -39,6 +44,29 @@ public class Board extends GameLogic {
     public Board(){
         selection = new ArrayList<>();
         startNewGame();
+
+        Line l = new Line();
+        l.setStroke(Paint.valueOf("Black"));
+        l.setFill(Paint.valueOf("Black"));
+        l.setStartX(50);
+        l.setEndX(50);
+        l.setStartY(200);
+        l.setEndY(600);
+
+        Circle slide = new Circle();
+        slide.setStroke(Paint.valueOf("Black"));
+        slide.setFill(Paint.valueOf("Black"));
+        slide.setRadius(10);
+
+        PathTransition slider = new PathTransition();
+        slider.setDuration(Duration.minutes(1));
+        slider.setNode(slide);
+        slider.setPath(l);
+        slider.setCycleCount(1);
+        slider.setAutoReverse(true);
+        slider.play();
+
+        bp.getChildren().addAll(l,slide);
     }
 
     public void startNewGame(){
@@ -64,9 +92,11 @@ public class Board extends GameLogic {
 
 
     public void drawTitle(){
+        //Binding here?
         System.out.println("drawTitle");
         String who = turn == 0 ? "Blue" : "Red";
         Label lb = new Label(who + " player's turn");
+        //lb.textProperty().bind(turn);
         lb.setFont(Font.font("SansSerif", 30));
         bp.setTop(lb);
         bp.setAlignment(lb, Pos.CENTER);

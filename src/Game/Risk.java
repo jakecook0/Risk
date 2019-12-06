@@ -10,7 +10,7 @@ public class Risk extends Application {
     public void start(Stage stage) throws Exception {
         Board board = new Board();
 
-        Scene scene = new Scene(board.bp, 750, 750);
+        Scene scene = new Scene(board.bp, 1000, 1000);
         stage.setTitle("Risk demo");
         stage.setScene(scene);
         stage.show();
