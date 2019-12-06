@@ -90,17 +90,42 @@ public class Board extends GameLogic {
         drawButtons();
     }
 
+    public boolean isWinner(){
+        ArrayList<Color> colorList = new ArrayList<>();
+        for (Color[] c : this.colors) {
+            colorList.addAll(Arrays.asList(c));
+        }
+        return (!colorList.contains(Color.WHITE) && !colorList.contains(Color.RED)) || ((!colorList.contains(Color.WHITE) && !colorList.contains(Color.BLUE)));
+    }
 
     public void drawTitle(){
-        //Binding here?
-        System.out.println("drawTitle");
-        String who = turn == 0 ? "Blue" : "Red";
-        Label lb = new Label(who + " player's turn");
-        //lb.textProperty().bind(turn);
-        lb.setFont(Font.font("SansSerif", 30));
-        bp.setTop(lb);
-        bp.setAlignment(lb, Pos.CENTER);
-//        System.out.println("Got here1");
+        if(isWinner()){
+            ArrayList<Color> colorList = new ArrayList<>();
+            for (Color[] c : this.colors) {
+                colorList.addAll(Arrays.asList(c));
+            }
+            if(colorList.contains(Color.BLUE)){
+                Label lb = new Label("Blue Player Won!");
+                lb.setFont(Font.font("SansSerif", 30));
+                bp.setTop(lb);
+                bp.setAlignment(lb, Pos.CENTER);
+            }else{
+                Label lb = new Label("Red Player Won!");
+                lb.setFont(Font.font("SansSerif", 30));
+                bp.setTop(lb);
+                bp.setAlignment(lb, Pos.CENTER);
+            }
+        }else {
+            //Binding here?
+            System.out.println("drawTitle");
+            String who = turn == 0 ? "Blue" : "Red";
+            Label lb = new Label(who + " player's turn");
+            //lb.textProperty().bind(turn);
+            lb.setFont(Font.font("SansSerif", 30));
+            bp.setTop(lb);
+            bp.setAlignment(lb, Pos.CENTER);
+            //        System.out.println("Got here1");
+        }
     }
 
     public void drawBoard() {
