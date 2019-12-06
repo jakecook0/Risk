@@ -26,6 +26,7 @@ public class Board extends GameLogic {
     Integer[][] integerTroops = new Integer[10][10];
     ArrayList<Integer> selection;
     int turn = 0;
+    public boolean setUpPhase = false;
     Color[][] colors = new Color[][]{   //10x10 color grid BLACK SPACES ARE EMPTY-REGIONS
             {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
             {Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
@@ -117,14 +118,43 @@ public class Board extends GameLogic {
     }
 
     private EventHandler<MouseEvent> clickedBox = e -> {
-        Rectangle r = (Rectangle)e.getSource();
-        int row = gpColors.getRowIndex(r);
-        int col = gpColors.getColumnIndex(r);
-        //give clicked result to something
-        System.out.println("This box was clicked: " + row + ", " + col + "\nWith color Value: " + boardColors[row][col]);    //for testing purposes
-        highlightSelection(row, col);
-        this.selection.add(row);
-        this.selection.add(col);
+        if(setUpPhase){
+            Rectangle r = (Rectangle) e.getSource();
+            int row = gpColors.getRowIndex(r);
+            int col = gpColors.getColumnIndex(r);
+            //give clicked result to something
+            System.out.println("This box was clicked: " + row + ", " + col + "\nWith color Value: " + boardColors[row][col]);    //for testing purposes
+            highlightSelection(row, col);
+            this.selection.add(row);
+            this.selection.add(col);
+
+            if (this.turn == 0) {
+                this.colors[this.selection.get(0)][this.selection.get(1)] = (Color.BLUE);
+                this.integerTroops[this.selection.get(0)][this.selection.get(1)] = 2;
+            } else {
+                this.colors[this.selection.get(0)][this.selection.get(1)] = (Color.RED);
+                this.integerTroops[this.selection.get(0)][this.selection.get(1)] = 2;
+            }
+            this.turn = 1 - this.turn;
+            this.refresh(this);
+
+            ArrayList<Color> colorList = new ArrayList<>();
+            for (Color[] c : this.colors) {
+                colorList.addAll(Arrays.asList(c));
+            }
+            if(!colorList.contains(Color.WHITE)){
+                setUpPhase = false;
+            }
+        }else {
+            Rectangle r = (Rectangle) e.getSource();
+            int row = gpColors.getRowIndex(r);
+            int col = gpColors.getColumnIndex(r);
+            //give clicked result to something
+            System.out.println("This box was clicked: " + row + ", " + col + "\nWith color Value: " + boardColors[row][col]);    //for testing purposes
+            highlightSelection(row, col);
+            this.selection.add(row);
+            this.selection.add(col);
+        }
     };
 
     private void convertColors(Color[][] colors) {      //makes regions clickable
