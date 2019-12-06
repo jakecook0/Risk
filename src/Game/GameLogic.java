@@ -2,12 +2,8 @@ package Game;
 
 import javafx.scene.paint.Color;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 
 public class GameLogic {
-//    Board board = new Board();
-//    ArrayList<Integer> selections = board.selection;    //the selection doesn't save to this Instance of board, but a general one
 
     public GameLogic() {
 
@@ -16,11 +12,8 @@ public class GameLogic {
     public void gameInit(Board board) {    //get one array position
         //alternates between players to place troops in territories (gives each territory 2? troops)
         //needs to modify the colors[], troops[] and turn
+        board.startNewGame();
         board.setUpPhase = true;
-        //board.colors[board.selection.get(0)][board.selection.get(1)] = board.turn == 0 ? Color.BLUE : Color.RED;
-        //board.integerTroops[board.selection.get(0)][board.selection.get(1)] = 2;
-        //board.turn = 1 - board.turn;
-        //board.refresh(board);
     }
 
 

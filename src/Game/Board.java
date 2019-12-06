@@ -23,22 +23,11 @@ public class Board extends GameLogic {
     Rectangle[][] boardSelections = new Rectangle[10][10];
     Label[][] boardTroops = new Label[10][10];
     StackPane sp = new StackPane();
-    Integer[][] integerTroops = new Integer[10][10];
+    Integer[][] integerTroops;
     ArrayList<Integer> selection;
-    int turn = 0;
+    int turn;
     public boolean setUpPhase = false;
-    Color[][] colors = new Color[][]{   //10x10 color grid BLACK SPACES ARE EMPTY-REGIONS
-            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
-            {Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
-            {Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
-            {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
-            {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
-            {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, Color.BLACK, Color.WHITE},
-            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE,},
-            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE,},
-            {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
-            {Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
-    };
+    Color[][] colors;
     Button place = new Button("Place");
     Button attack = new Button("Attack");
     Button move = new Button("Move");
@@ -49,10 +38,15 @@ public class Board extends GameLogic {
 
     public Board(){
         selection = new ArrayList<>();
+        startNewGame();
+    }
+
+    public void startNewGame(){
+        turn = 0;
         initTroops();   //initializes the board troops to '0'
+        resetColors();
         initSelections();
         setActions();   //sets the actions of the buttons (from the GameLogic)
-//        refresh(Board.this);  //draws the GUI
         refresh(Board.this);
     }
 
@@ -129,13 +123,18 @@ public class Board extends GameLogic {
             this.selection.add(col);
 
             if (this.turn == 0) {
-                this.colors[this.selection.get(0)][this.selection.get(1)] = (Color.BLUE);
-                this.integerTroops[this.selection.get(0)][this.selection.get(1)] = 2;
+                if(this.colors[row][col] == (Color.WHITE)) {
+                    this.colors[row][col] = (Color.BLUE);
+                    this.integerTroops[row][col] = 2;
+                    this.endTurn(this);
+                }
             } else {
-                this.colors[this.selection.get(0)][this.selection.get(1)] = (Color.RED);
-                this.integerTroops[this.selection.get(0)][this.selection.get(1)] = 2;
+                if(this.colors[row][col] == (Color.WHITE)) {
+                    this.colors[row][col] = (Color.RED);
+                    this.integerTroops[row][col] = 2;
+                    this.endTurn(this);
+                }
             }
-            this.turn = 1 - this.turn;
             this.refresh(this);
 
             ArrayList<Color> colorList = new ArrayList<>();
@@ -201,10 +200,26 @@ public class Board extends GameLogic {
     }
 
     public void initTroops() {
+        this.integerTroops = new Integer[10][10];
         for (Integer[] troop : integerTroops) {
             Arrays.fill(troop, 0);
         }
     }   //integer troops initializer to 0;
+
+    private void resetColors(){
+        this.colors = new Color[][]{   //10x10 color grid BLACK SPACES ARE EMPTY-REGIONS
+                {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
+                {Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
+                {Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
+                {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
+                {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK},
+                {Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, Color.BLACK, Color.WHITE},
+                {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE,},
+                {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.WHITE,},
+                {Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK},
+                {Color.BLACK, Color.BLACK, Color.BLACK, Color.BLACK, Color.WHITE, Color.WHITE, Color.WHITE, Color.BLACK, Color.BLACK, Color.BLACK},
+        };
+    }
 
     public void setActions() {
         place.setOnAction(e -> place(Board.this));
